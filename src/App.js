@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Post from "./components/Post";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { PostsThunk } from "./redux/thunk/ThunkPosts";
+import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 function App() {
+  const allPosts = useSelector((store) => store.posts);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(PostsThunk());
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {/* Просто чтобы была ссылка на домашнюю */}
+        <Link to="/"> Explore</Link>
       </header>
+      <Container>
+        {allPosts.data?.products.map((post) => (
+          <Post post={post} />
+        ))}
+      </Container>
     </div>
   );
 }
